@@ -1,0 +1,10 @@
+AllCops:
+  NewCops: enable
+Style/OpenStructUse:
+  Enabled: false
+Metrics/MethodLength:
+  Exclude:
+    - 'test/**/*'
+Layout/LineLength:
+  Exclude:
+    - 'test/**/*'
