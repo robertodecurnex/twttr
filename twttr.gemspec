@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
     'lib/twttr/client/error.rb',
     'lib/twttr/client/oauth_request.rb',
     'lib/twttr/model.rb',
-    'lib/twttr/model/user.rb',
+    'lib/twttr/model/user.rb'
   ]
   s.homepage    = 'https://rubygems.org/gems/twttr'
   s.license     = 'MIT'

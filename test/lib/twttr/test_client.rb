@@ -11,6 +11,8 @@ module Twttr
 
         config.access_token        = 'access_token'
         config.access_token_secret = 'access_secret'
+
+        config.user_fields         = %w[id name username]
       end
     end
 
@@ -20,6 +22,10 @@ module Twttr
       Twttr::Client.new do |config|
         assert_instance_of(Client::Config, config)
       end
+    end
+
+    def test_config_user_fields
+      assert_equal(@client.config.user_fields, 'id,name,username')
     end
 
     def test_get_without_params
