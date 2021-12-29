@@ -1,6 +1,11 @@
 # Twttr
 Twitter API v2 Interface
 
+[![example workflow](https://github.com/robertodecurnex/twttr/actions/workflows/test.yml/badge.svg)](https://github.com/robertodecurnex/twttr/actions/workflows/test.yml)
+[![Gem Version](https://badge.fury.io/rb/twttr.svg)](https://rubygems.org/gems/twttr)
+[![Coverage Status](https://coveralls.io/repos/github/robertodecurnex/twttr/badge.svg?branch=master)](https://coveralls.io/github/robertodecurnex/twttr?branch=master)
+-----
+
 ## Summery
 Modular Twitter API interface, initially targeting Twitter API v2
 
