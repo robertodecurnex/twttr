@@ -4,6 +4,7 @@ Twitter API v2 Interface
 [![example workflow](https://github.com/robertodecurnex/twttr/actions/workflows/test.yml/badge.svg)](https://github.com/robertodecurnex/twttr/actions/workflows/test.yml)
 [![Gem Version](https://badge.fury.io/rb/twttr.svg)](https://rubygems.org/gems/twttr)
 [![Coverage Status](https://coveralls.io/repos/github/robertodecurnex/twttr/badge.svg?branch=master)](https://coveralls.io/github/robertodecurnex/twttr?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/22a43fe43bc5a038854e/maintainability)](https://codeclimate.com/github/robertodecurnex/twttr/maintainability)
 -----
 
 ## Summery
