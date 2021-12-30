@@ -15,8 +15,8 @@ module Twttr
         @client = client
       end
 
-      def following(pagination_token: nil, &block)
-        client.following(id, pagination_token: pagination_token, &block)
+      def following(max_results: nil, pagination_token: nil, &block)
+        client.following(id, max_results: max_results, pagination_token: pagination_token, &block)
       end
 
       private
