@@ -22,7 +22,7 @@ module Twttr
                   {"id": "1234", "username": "@username"},
                   {"id": "12345", "username": "@username2"}
                 ],
-                "meta": {}
+                "meta": {"result_count": 2}
               }'
               @mock_oauth_response = OpenStruct.new(body: mock_body)
             end
@@ -51,6 +51,24 @@ module Twttr
                   users.each { |user| assert_instance_of(Twttr::Model::User, user) }
                   assert_nil(nil, token)
                 end
+              end
+            end
+
+            def test_following_without_results
+              mock_body = '{
+                "data": [],
+                "meta": {"result_count": 0}
+              }'
+              mock = lambda do |uri, _config|
+                assert_equal('https://api.twitter.com/2/users/user_id/following', uri.to_s)
+                OpenStruct.new(body: mock_body)
+              end
+              Twttr::Client::OAuthRequest.stub :get, mock do
+                response = @client.following('user_id') do |_users, _token|
+                  assert(false, 'Block should not be called')
+                end
+
+                assert_equal([[], nil], response)
               end
             end
           end

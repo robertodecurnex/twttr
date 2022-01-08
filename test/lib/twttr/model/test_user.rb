@@ -20,7 +20,7 @@ module Twttr
             {"id": "1234", "username": "@username"},
             {"id": "12345", "username": "@username2"}
           ],
-          "meta": {}
+          "meta": {"result_count": 2}
         }'
         @mock_oauth_response = OpenStruct.new(body: mock_body)
       end

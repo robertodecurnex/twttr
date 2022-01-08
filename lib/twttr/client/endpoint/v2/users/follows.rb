@@ -19,25 +19,25 @@ module Twttr
             # @yield [Array<Twttr::Model::User>] Users followed by page.
             # @return [Array<Twttr::Model::User>] Users followed.
             # @return [String,NilClass] Pagination token.
-            def following(user_id, max_results: nil, pagination_token: nil) # rubocop:disable Metrics/MethodLength
-              loop do
-                response = get(FOLLOWING_PATH, params: { user_id: user_id },
-                                               query_params: {
-                                                 'user.fields': config.user_fields,
-                                                 max_results: max_results,
-                                                 pagination_token: pagination_token
-                                               }.compact)
+            def following(user_id, max_results: nil, pagination_token: nil, &block) # rubocop:disable Metrics/MethodLength
+              response = get(FOLLOWING_PATH, params: { user_id: user_id },
+                                             query_params: {
+                                               'user.fields': config.user_fields,
+                                               max_results: max_results,
+                                               pagination_token: pagination_token
+                                             }.compact)
 
-                users = response['data'].map { |v| Model::User.new(v, self) }
+              return [], nil if response['meta']['result_count'].zero?
 
-                pagination_token = response['meta']['pagination_token']
+              users = response['data'].map { |v| Model::User.new(v, self) }
 
-                return users, pagination_token unless block_given?
+              pagination_token = response['meta']['pagination_token']
 
-                yield users, pagination_token
+              return users, pagination_token unless block_given?
 
-                break if pagination_token.nil?
-              end
+              yield users, pagination_token
+
+              following(user_id, pagination_token, &block) unless pagination_token.nil?
             end
           end
         end
