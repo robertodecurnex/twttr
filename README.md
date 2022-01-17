@@ -43,6 +43,9 @@ client.user_by_username("username") #=> #<Twttr::Model::User>
 
 #Twttr::Client#users(:user_ids)
 client.users(["user_id_1", "user_id_2"]) #=> [#<Twttr::Model::User>]
+
+# Twttr::Client#Following
+client.following("user_id") == client.user("user_id").following
 ```
 ### User
 ```ruby
@@ -51,8 +54,8 @@ client.users(["user_id_1", "user_id_2"]) #=> [#<Twttr::Model::User>]
 # Yields each page of users
 user.following do |users, pagination_token|
   users #=> [#<Twttr::Model::User>]
-end
+end #=> [#<Twttr::Model::User>]
 
 # First page of users
-user.following #=> [#<Twttr::Model::User>], pagination_token
+user.following #=> [#<Twttr::Model::User>]
 ```

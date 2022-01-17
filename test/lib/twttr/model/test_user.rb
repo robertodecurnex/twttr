@@ -15,14 +15,24 @@ module Twttr
         end
 
         @user = Twttr::Model::User.new({ id: 'user_id' }, @client)
-        mock_body = '{
+        first_mock_body = '{
           "data": [
             {"id": "1234", "username": "@username"},
             {"id": "12345", "username": "@username2"}
           ],
+          "meta": {"result_count": 2, "pagination_token": "next-token"}
+        }'
+        second_mock_body = '{
+          "data": [
+            {"id": "123456", "username": "@username3"},
+            {"id": "1234567", "username": "@username4"}
+          ],
           "meta": {"result_count": 2}
         }'
-        @mock_oauth_response = OpenStruct.new(body: mock_body)
+        @mock_oauth_responses = {
+          'https://api.twitter.com/2/users/user_id/following' => OpenStruct.new(body: first_mock_body),
+          'https://api.twitter.com/2/users/user_id/following?pagination_token=next-token' => OpenStruct.new(body: second_mock_body)
+        }
       end
 
       def test_initialize
@@ -56,28 +66,28 @@ module Twttr
 
       def test_following
         mock = lambda do |uri, _config|
-          assert_equal('https://api.twitter.com/2/users/user_id/following', uri.to_s)
-          @mock_oauth_response
+          @mock_oauth_responses[uri.to_s]
         end
         Twttr::Client::OAuthRequest.stub :get, mock do
-          users, token = @user.following
-          assert_equal(2, users.length)
+          users = @user.following
+          assert_equal(4, users.length)
           users.each { |user| assert_instance_of(Twttr::Model::User, user) }
-          assert_nil(token)
         end
       end
 
-      def test_following_with_block
+      def test_following_with_block # rubocop:disable Metrics/AbcSize
         mock = lambda do |uri, _config|
-          assert_equal('https://api.twitter.com/2/users/user_id/following', uri.to_s)
-          @mock_oauth_response
+          puts uri.to_s
+          @mock_oauth_responses[uri.to_s]
         end
         Twttr::Client::OAuthRequest.stub :get, mock do
-          @user.following do |users, token|
+          all_users = @user.following do |users, token|
             assert_equal(2, users.length)
             users.each { |user| assert_instance_of(Twttr::Model::User, user) }
             assert_nil(nil, token)
           end
+          assert_equal(4, all_users.length)
+          all_users.each { |user| assert_instance_of(Twttr::Model::User, user) }
         end
       end
     end
