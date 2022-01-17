@@ -13,13 +13,15 @@ module Twttr
             # GET /2/users/:id/following
             # https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-following
             #
+            # Returns paginated list of users followed by user_id.
+            #
             # @param user_id [String] The user ID whose following you would like to retrieve.
             # @param max_results [Integer] Max number of results per peage.
             # @param pagination_token [String] Initial page pagination token.
             # @yield [Array<Twttr::Model::User>] Users followed by page.
+            # @yield [String,NilClass] Pagination token.
             # @return [Array<Twttr::Model::User>] Users followed.
-            # @return [String,NilClass] Pagination token.
-            def following(user_id, max_results: nil, pagination_token: nil, &block) # rubocop:disable Metrics/MethodLength
+            def following(user_id, max_results: nil, pagination_token: nil, &block) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
               response = get(FOLLOWING_PATH, params: { user_id: user_id },
                                              query_params: {
                                                'user.fields': config.user_fields,
@@ -33,11 +35,11 @@ module Twttr
 
               pagination_token = response['meta']['pagination_token']
 
-              return users, pagination_token unless block_given?
+              yield users, pagination_token if block_given?
 
-              yield users, pagination_token
+              return users if pagination_token.nil?
 
-              following(user_id, pagination_token, &block) unless pagination_token.nil?
+              users + following(user_id, pagination_token: pagination_token, &block)
             end
           end
         end
