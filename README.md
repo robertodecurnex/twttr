@@ -44,6 +44,9 @@ client.user_by_username("username") #=> #<Twttr::Model::User>
 #Twttr::Client#users(:user_ids)
 client.users(["user_id_1", "user_id_2"]) #=> [#<Twttr::Model::User>]
 
+# Twttr::Client#Followers
+client.followers("user_id") == client.user("user_id").followers
+
 # Twttr::Client#Following
 client.following("user_id") == client.user("user_id").following
 ```
