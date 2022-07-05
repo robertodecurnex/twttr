@@ -7,7 +7,7 @@ module Twttr
     module Endpoint
       module V2
         module Users
-          class TestFollows < Minitest::Test
+          class TestFollows < Minitest::Test # rubocop:disable Metrics/ClassLength
             def setup
               @client = Twttr::Client.new do |config|
                 config.consumer_key        = 'consumer_key'
@@ -32,9 +32,55 @@ module Twttr
                 "meta": {"result_count": 2}
               }'
               @mock_oauth_responses = {
+                'https://api.twitter.com/2/users/user_id/followers' => OpenStruct.new(body: first_mock_body),
+                'https://api.twitter.com/2/users/user_id/followers?pagination_token=next-token' => OpenStruct.new(body: second_mock_body),
                 'https://api.twitter.com/2/users/user_id/following' => OpenStruct.new(body: first_mock_body),
                 'https://api.twitter.com/2/users/user_id/following?pagination_token=next-token' => OpenStruct.new(body: second_mock_body)
               }
+            end
+
+            def test_followers
+              mock = lambda do |uri, _config|
+                @mock_oauth_responses[uri.to_s]
+              end
+              Twttr::Client::OAuthRequest.stub :get, mock do
+                users = @client.followers('user_id')
+                assert_equal(4, users.length)
+                users.each { |user| assert_instance_of(Twttr::Model::User, user) }
+              end
+            end
+
+            def test_followers_with_block
+              mock = lambda do |uri, _config|
+                @mock_oauth_responses[uri.to_s]
+              end
+              Twttr::Client::OAuthRequest.stub :get, mock do
+                all_users = @client.followers('user_id') do |users, token|
+                  assert_equal(2, users.length)
+                  users.each { |user| assert_instance_of(Twttr::Model::User, user) }
+                  assert_nil(nil, token)
+                end
+                assert_equal(4, all_users.length)
+                all_users.each { |user| assert_instance_of(Twttr::Model::User, user) }
+              end
+            end
+
+            def test_followers_without_results
+              mock_body = '{
+                "data": [],
+                "meta": {"result_count": 0}
+              }'
+              mock = lambda do |uri, _config|
+                assert_equal('https://api.twitter.com/2/users/user_id/followers', uri.to_s)
+                OpenStruct.new(body: mock_body)
+              end
+              Twttr::Client::OAuthRequest.stub :get, mock do
+                response = @client.followers('user_id') do |_users, _token|
+                  assert(false, 'Block should not be called')
+                end
+
+                assert_equal([], response)
+              end
             end
 
             def test_following

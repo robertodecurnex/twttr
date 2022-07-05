@@ -9,6 +9,7 @@ module Twttr
         module Users
           ME_PATH = "#{V2::V2_PATH}/users/me"
           USERS_PATH = "#{V2::V2_PATH}/users"
+          USERS_BY_PATH = "#{V2::V2_PATH}/users/by"
           USER_BY_USERNAME_PATH = "#{V2::V2_PATH}/users/by/username/%<username>s"
           USER_PATH = "#{V2::V2_PATH}/users/%<user_id>s"
 
@@ -71,6 +72,19 @@ module Twttr
           def users(user_ids)
             response = get(USERS_PATH,
                            query_params: { ids: user_ids.join(','), 'user.fields': config.user_fields })
+            response['data'].map { |v| Model::User.new(v, self) }
+          end
+
+          # GET /2/users/by
+          # https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by
+          #
+          # Returns target users by username
+          #
+          # @param usernames [Array<String>] Traget usernames.
+          # @return [Array<Twttr::Model::User>] Target users.
+          def users_by(usernames)
+            response = get(USERS_BY_PATH,
+                           query_params: { usernames: usernames.join(','), 'user.fields': config.user_fields })
             response['data'].map { |v| Model::User.new(v, self) }
           end
         end

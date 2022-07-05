@@ -59,6 +59,20 @@ module Twttr
             end
           end
 
+          def test_users_by
+            mock = lambda do |uri, _config|
+              assert_equal('https://api.twitter.com/2/users/by?usernames=username_1%2Cusername_2', uri.to_s)
+              @users_mock_oauth_response
+            end
+            Twttr::Client::OAuthRequest.stub :get, mock do
+              users = @client.users_by(%w[username_1 username_2])
+              assert_equal(2, users.length)
+              users.each { |user| assert_instance_of(Twttr::Model::User, user) }
+              assert_equal('1234', users.first.id)
+              assert_equal('@username', users.first.username)
+            end
+          end
+
           def test_users
             mock = lambda do |uri, _config|
               assert_equal('https://api.twitter.com/2/users?ids=user_id%2Cuser_id_2', uri.to_s)

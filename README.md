@@ -49,6 +49,16 @@ client.following("user_id") == client.user("user_id").following
 ```
 ### User
 ```ruby
+# Twttr::Model::User#followers
+#
+# Yields each page of users
+user.followers do |users, pagination_token|
+  users #=> [#<Twttr::Model::User>]
+end #=> [#<Twttr::Model::User>]
+
+# Follower users
+user.followers #=> [#<Twttr::Model::User>]
+
 # Twttr::Model::User#following
 #
 # Yields each page of users
@@ -77,7 +87,7 @@ user.following #=> [#<Twttr::Model::User>]
 |:---                               |:---:            |:---:              |
 |GET /2/users                       |v0.0.5           |:white_check_mark: |
 |GET /2/users/:id                   |v0.0.5           |:white_check_mark: |
-|GET /2/users/by                    |-                |-                  |
+|GET /2/users/by                    |v0.0.6           |:white_check_mark: |
 |GET /2/users/by/username/:username |v0.0.5           |:white_check_mark: |
 |GET /2/users/me                    |v0.0.5           |:white_check_mark: |
 
@@ -86,6 +96,6 @@ user.following #=> [#<Twttr::Model::User>]
 |Endpoint                                                   |Initial Release  |Implemented?       |
 |:---                                                       |:---:            |:---:              |
 |GET /2/users/:id/following                                 |v0.0.5           |:white_check_mark: |
-|GET /2/users/:id/followers                                 |-                |-                  |
+|GET /2/users/:id/followers                                 |v0.0.6           |:white_check_mark: |
 |POST /2/users/:id/following                                |-                |-                  |
 |DELETE /2/users/:source_user_id/following/:target_user_id  |-                |-                  |
