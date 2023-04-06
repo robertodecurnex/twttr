@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'twttr'
-  s.version     = '0.0.7'
+  s.version     = '1.0.0'
   s.summary     = 'Twitter API v2 Interface'
   s.description = 'Modular Twitter API interface, initially targeting Twitter API v2'
   s.authors     = ['Roberto Decurnex']
@@ -22,8 +22,8 @@ Gem::Specification.new do |s|
   ]
   s.homepage    = 'https://rubygems.org/gems/twttr'
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 2.7'
-  s.add_runtime_dependency  'oauth', '~> 0.5.8'
+  s.required_ruby_version = '>= 3.1'
+  s.add_runtime_dependency  'oauth', '~> 1.1.0'
   s.add_runtime_dependency  'uri-query_params', '~> 0.7.2'
   s.metadata = {
     'rubygems_mfa_required' => 'true'
