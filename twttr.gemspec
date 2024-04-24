@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'twttr'
-  s.version     = '1.0.0'
+  s.version     = '0.1.0'
   s.summary     = 'Twitter API v2 Interface'
   s.description = 'Modular Twitter API interface, initially targeting Twitter API v2'
   s.authors     = ['Roberto Decurnex']
